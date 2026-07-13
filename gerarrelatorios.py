@@ -47,8 +47,8 @@ C_BRNC  = colors.white
 C_PRT   = colors.black
 
 
-ARCGIS_USER = os.getenv("ARCGIS_USER", "thiago.vaz")
-ARCGIS_PASS = os.getenv("ARCGIS_PASS", "@Der2025")
+ARCGIS_USER = os.getenv("ARCGIS_USER")
+ARCGIS_PASS = os.getenv("ARCGIS_PASS")
 
 TOKEN_URL = (
     "https://observatorio.infraestrutura.mg.gov.br"
