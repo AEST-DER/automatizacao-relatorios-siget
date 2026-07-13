@@ -24,8 +24,13 @@ app = FastAPI(
     version="2.0.0",
 )
 
-OUTPUT_DIR = Path(__file__).parent / "output"
-OUTPUT_DIR.mkdir(exist_ok=True)
+if os.getenv("VERCEL"):
+    OUTPUT_DIR = Path("/tmp/output")
+else:
+    BASE_DIR = Path(__file__).parent
+    OUTPUT_DIR = BASE_DIR / "output"
+
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def _gerar_relatorio(tipo: str, dados: DadosAgregados, ano: int, mes: int, out: str) -> str:
