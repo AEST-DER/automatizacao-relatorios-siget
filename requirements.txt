@@ -1,0 +1,12 @@
+# Dependências do sistema de relatórios DER-MG
+# Instale com: pip install -r requirements.txt
+
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9      # necessário para Form() no FastAPI
+
+requests>=2.31.0
+pandas>=2.2.0
+
+reportlab>=4.1.0
+openpyxl>=3.1.2
