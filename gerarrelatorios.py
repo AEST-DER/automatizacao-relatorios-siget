@@ -136,9 +136,22 @@ def _normalizar_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     for col in ["n_pessoas_orientadas_educadas", "qtd_material_distribuido"]:
         df[col] = pd.to_numeric(df.get(col, 0), errors="coerce").fillna(0).astype(int)
 
-    for col in ["total_veiculos", "qtd_veiculos", "veiculos"]:
-        if col in df.columns:
-            df.drop(columns=[col], inplace=True)
+    COLUNAS_VEICULOS = [
+        "numero_veiculos_passeio_blitz",
+        "n_veiculos_passageiros_blitz",
+        "n_veiculos_carga_blitz",
+        "numero_veiculos_moto_blitz",
+    ]
+    
+    for coluna in COLUNAS_VEICULOS:
+        df[coluna] = pd.to_numeric(
+            df.get(coluna, 0),
+            errors="coerce"
+        ).fillna(0).astype(int)
+    
+    df["veiculos"] = df[COLUNAS_VEICULOS].sum(axis=1)
+
+    
 
     df["tipo_label"] = df["tipo_acao"].apply(_padronizar_tipo_acao)
     df["reg_label"]  = df.apply(_extrair_regional, axis=1)
@@ -315,10 +328,19 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
     # Cada tipo tem 3 sub-colunas (Acoes, Pessoas, Divulg.)
     # Distribuímos o espaço restante igualmente entre as sub-colunas
     if n_tipos > 0:
-        espaco_por_tipo = (LARGURA_UTIL - LARGURA_LABEL) / n_tipos
-        col_acoes   = espaco_por_tipo * 0.30
-        col_pessoas = espaco_por_tipo * 0.40
-        col_divulg  = espaco_por_tipo * 0.30
+        n_subcolunas = 0
+
+        for tipo in tipos:
+            if tipo == "Blitz Educativa":
+                n_subcolunas += 4
+            else:
+                n_subcolunas += 3
+        
+        largura_subcoluna = (LARGURA_UTIL - LARGURA_LABEL) / n_subcolunas
+        col_acoes = largura_subcoluna
+        col_pessoas = largura_subcoluna
+        col_veiculos = largura_subcoluna
+        col_divulg = largura_subcoluna
     else:
         col_acoes = col_pessoas = col_divulg = 2.0 * cm
 
@@ -329,11 +351,12 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
         linha2 += [
             _paragrafo("<b>Acoes</b>",   tamanho=7, negrito=True),
             _paragrafo("<b>Pessoas</b>", tamanho=7, negrito=True),
+            _paragrafo("<b>Veiculos</b>"),
             _paragrafo("<b>Divulg.</b>", tamanho=7, negrito=True),
         ]
-        larguras_colunas += [col_acoes, col_pessoas, col_divulg]
+        larguras_colunas += [col_acoes, col_pessoas, col_veiculos, col_divulg]
     linhas = [linha1, linha2]
-    totais = {tipo: {"acoes": 0, "pessoas": 0, "divulg": 0} for tipo in tipos}
+    totais = {tipo: {"acoes": 0, "pessoas": 0, "veiculos": 0, "divulg": 0} for tipo in tipos}
 
     for label in labels:
         subset_label = df_base[df_base[agrupar_por] == label] if not df_base.empty else df_base
@@ -343,16 +366,19 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
             acoes  = len(subset_tipo)
             pessoas = int(subset_tipo["n_pessoas_orientadas_educadas"].sum()) if not subset_tipo.empty else 0
             divulg  = int(subset_tipo["qtd_material_distribuido"].sum())      if not subset_tipo.empty else 0
-            linha += [_valor_formatado(acoes), _valor_formatado(pessoas), _valor_formatado(divulg)]
+            if tipo == "Blitz Educativa": 
+                veiculos = int(subset_tipo["veiculos"].sum())
+            linha += [_valor_formatado(acoes), _valor_formatado(pessoas), _valor_formatado(veiculos), _valor_formatado(divulg)]
             totais[tipo]["acoes"]  += acoes
             totais[tipo]["pessoas"] += pessoas
+            totais[tipo]["veiculos"] += veiculos
             totais[tipo]["divulg"]  += divulg
         linhas.append(linha)
 
     linha_total = [_paragrafo("<b>TOTAL</b>", tamanho=7.5, negrito=True)]
     for tipo in tipos:
         t = totais[tipo]
-        linha_total += [_valor_negrito(t["acoes"]), _valor_negrito(t["pessoas"]), _valor_negrito(t["divulg"])]
+        linha_total += [_valor_negrito(t["acoes"]), _valor_negrito(t["pessoas"]), _valor_negrito(t["veiculos"]), _valor_negrito(t["divulg"])]
     linhas.append(linha_total)
 
     estilo = TableStyle([
@@ -369,9 +395,15 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
         ("LEFTPADDING",   (0, 0), (-1, -1), 2),
         ("RIGHTPADDING",  (0, 0), (-1, -1), 2),
     ])
-    for i in range(len(tipos)):
-        col = 1 + i * 3
-        estilo.add("SPAN", (col, 0), (col + 2, 0))
+    col = 1
+
+    for tipo in tipos:
+        if tipo == "Blitz Educativa":
+            estilo.add("SPAN", (col, 0), (col + 3, 0))
+            col += 4
+        else:
+            estilo.add("SPAN", (col, 0), (col + 2, 0))
+            col += 3
     for i in range(2, len(linhas) - 1):
         if i % 2 == 0:
             estilo.add("BACKGROUND", (0, i), (-1, i), C_ALT)
