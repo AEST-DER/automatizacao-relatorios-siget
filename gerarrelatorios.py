@@ -328,33 +328,63 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
     # Cada tipo tem 3 sub-colunas (Acoes, Pessoas, Divulg.)
     # Distribuímos o espaço restante igualmente entre as sub-colunas
     if n_tipos > 0:
-        n_subcolunas = 0
+        espaco_total = LARGURA_UTIL - LARGURA_LABEL
 
-        for tipo in tipos:
-            if tipo == "Blitz Educativa":
-                n_subcolunas += 4
-            else:
-                n_subcolunas += 3
+        n_subcolunas = len(tipos) * 3 + (1 if "Blitz Educativa" in tipos else 0)
         
-        largura_subcoluna = (LARGURA_UTIL - LARGURA_LABEL) / n_subcolunas
-        col_acoes = largura_subcoluna
-        col_pessoas = largura_subcoluna
-        col_veiculos = largura_subcoluna
-        col_divulg = largura_subcoluna
+        largura = espaco_total / n_subcolunas
+        
+        col_acoes = largura
+        col_pessoas = largura
+        col_veiculos = largura
+        col_divulg = largura
     else:
         col_acoes = col_pessoas = col_divulg = 2.0 * cm
 
     larguras_colunas = [LARGURA_LABEL]
 
     for tipo in tipos:
-        linha1 += [_paragrafo(f"<b>{tipo.upper()}</b>", tamanho=7.5, negrito=True), "", ""]
-        linha2 += [
-            _paragrafo("<b>Acoes</b>",   tamanho=7, negrito=True),
-            _paragrafo("<b>Pessoas</b>", tamanho=7, negrito=True),
-            _paragrafo("<b>Veiculos</b>"),
-            _paragrafo("<b>Divulg.</b>", tamanho=7, negrito=True),
-        ]
-        larguras_colunas += [col_acoes, col_pessoas, col_veiculos, col_divulg]
+    
+        if tipo == "Blitz Educativa":
+    
+            linha1 += [
+                _paragrafo(f"<b>{tipo.upper()}</b>", tamanho=7.5, negrito=True),
+                "", "", ""
+            ]
+    
+            linha2 += [
+                _paragrafo("<b>Acoes</b>", tamanho=7, negrito=True),
+                _paragrafo("<b>Pessoas</b>", tamanho=7, negrito=True),
+                _paragrafo("<b>Veiculos</b>", tamanho=7, negrito=True),
+                _paragrafo("<b>Divulg.</b>", tamanho=7, negrito=True),
+            ]
+    
+            larguras_colunas += [
+                col_acoes,
+                col_pessoas,
+                col_veiculos,
+                col_divulg
+            ]
+    
+        else:
+    
+            linha1 += [
+                _paragrafo(f"<b>{tipo.upper()}</b>", tamanho=7.5, negrito=True),
+                "",
+                ""
+            ]
+    
+            linha2 += [
+                _paragrafo("<b>Acoes</b>", tamanho=7, negrito=True),
+                _paragrafo("<b>Pessoas</b>", tamanho=7, negrito=True),
+                _paragrafo("<b>Divulg.</b>", tamanho=7, negrito=True),
+            ]
+    
+            larguras_colunas += [
+                col_acoes,
+                col_pessoas,
+                col_divulg
+            ]
     linhas = [linha1, linha2]
     totais = {tipo: {"acoes": 0, "pessoas": 0, "veiculos": 0, "divulg": 0} for tipo in tipos}
 
@@ -366,19 +396,53 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
             acoes  = len(subset_tipo)
             pessoas = int(subset_tipo["n_pessoas_orientadas_educadas"].sum()) if not subset_tipo.empty else 0
             divulg  = int(subset_tipo["qtd_material_distribuido"].sum())      if not subset_tipo.empty else 0
-            if tipo == "Blitz Educativa": 
-                veiculos = int(subset_tipo["veiculos"].sum())
-            linha += [_valor_formatado(acoes), _valor_formatado(pessoas), _valor_formatado(veiculos), _valor_formatado(divulg)]
-            totais[tipo]["acoes"]  += acoes
+            if tipo == "Blitz Educativa":
+
+                veiculos = int(subset_tipo["veiculos"].sum()) if not subset_tipo.empty else 0
+            
+                linha += [
+                    _valor_formatado(acoes),
+                    _valor_formatado(pessoas),
+                    _valor_formatado(veiculos),
+                    _valor_formatado(divulg)
+                ]
+            
+                totais[tipo]["veiculos"] += veiculos
+            
+            else:
+            
+                linha += [
+                    _valor_formatado(acoes),
+                    _valor_formatado(pessoas),
+                    _valor_formatado(divulg)
+                ]
+            
+            totais[tipo]["acoes"] += acoes
             totais[tipo]["pessoas"] += pessoas
-            totais[tipo]["veiculos"] += veiculos
-            totais[tipo]["divulg"]  += divulg
+            totais[tipo]["divulg"] += divulg
         linhas.append(linha)
 
     linha_total = [_paragrafo("<b>TOTAL</b>", tamanho=7.5, negrito=True)]
     for tipo in tipos:
+    
         t = totais[tipo]
-        linha_total += [_valor_negrito(t["acoes"]), _valor_negrito(t["pessoas"]), _valor_negrito(t["veiculos"]), _valor_negrito(t["divulg"])]
+    
+        if tipo == "Blitz Educativa":
+    
+            linha_total += [
+                _valor_negrito(t["acoes"]),
+                _valor_negrito(t["pessoas"]),
+                _valor_negrito(t["veiculos"]),
+                _valor_negrito(t["divulg"])
+            ]
+    
+        else:
+    
+            linha_total += [
+                _valor_negrito(t["acoes"]),
+                _valor_negrito(t["pessoas"]),
+                _valor_negrito(t["divulg"])
+            ]
     linhas.append(linha_total)
 
     estilo = TableStyle([
