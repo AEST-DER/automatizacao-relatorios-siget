@@ -243,15 +243,16 @@ class DadosAgregados:
 def _paragrafo(texto: str, tamanho: int = 8, alinhamento: str = "CENTER",
                negrito: bool = False, cor=colors.black) -> Paragraph:
     texto_fmt = "" if (texto is None or str(texto).lower() in ("nan", "none") or texto == 0) else str(texto)
+    #O splitLongWords=False impede que palavras como VEÍCULOS, PESSOAS e EDUCATIVA sejam quebradas no meio. Se não houver espaço suficiente, a palavra permanece inteira (ajustar levemente a largura da coluna ou o tamanho da fonte, se necessário).
     estilo = ParagraphStyle(
         "custom",
-        fontName  = "Helvetica-Bold" if negrito else "Helvetica",
-        fontSize  = tamanho,
-        alignment = TA_CENTER if alinhamento == "CENTER" else TA_LEFT,
-        leading   = tamanho + 2,
-        spaceAfter  = 0,
-        spaceBefore = 0,
-        textColor = cor,
+        fontName="Helvetica-Bold" if negrito else "Helvetica",
+        fontSize=tamanho,
+        alignment=TA_CENTER if alinhamento == "CENTER" else TA_LEFT,
+        leading=tamanho + 1,
+        splitLongWords=False,
+        wordWrap="CJK",
+        textColor=cor,
     )
     return Paragraph(texto_fmt, estilo)
 
