@@ -349,15 +349,15 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
         if tipo == "Blitz Educativa":
     
             linha1 += [
-                _paragrafo(f"<b>{tipo.upper()}</b>", tamanho=6.5, negrito=True),
+                _paragrafo(f"<b>{tipo.upper()}</b>", tamanho=7.0, negrito=True),
                 "", "", ""
             ]
     
             linha2 += [
-                _paragrafo("<b>Acoes</b>", tamanho=6, negrito=True),
-                _paragrafo("<b>Pessoas</b>", tamanho=6, negrito=True),
-                _paragrafo("<b>Veiculos</b>", tamanho=6, negrito=True),
-                _paragrafo("<b>Divulg.</b>", tamanho=6, negrito=True),
+                _paragrafo("<b>Acoes</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Pessoas</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Veiculos</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Divulg.</b>", tamanho=6.5, negrito=True),
             ]
     
             larguras_colunas += [
@@ -370,15 +370,15 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
         else:
     
             linha1 += [
-                _paragrafo(f"<b>{tipo.upper()}</b>", tamanho=7.5, negrito=True),
+                _paragrafo(f"<b>{tipo.upper()}</b>", tamanho=7.0, negrito=True),
                 "",
                 ""
             ]
     
             linha2 += [
-                _paragrafo("<b>Acoes</b>", tamanho=7, negrito=True),
-                _paragrafo("<b>Pessoas</b>", tamanho=7, negrito=True),
-                _paragrafo("<b>Divulg.</b>", tamanho=7, negrito=True),
+                _paragrafo("<b>Acoes</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Pessoas</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Divulg.</b>", tamanho=6.5, negrito=True),
             ]
     
             larguras_colunas += [
