@@ -306,8 +306,8 @@ def criar_documento_pdf(caminho: str):
     return SimpleDocTemplate(
         caminho,
         pagesize     = landscape(A4),
-        leftMargin   = 1.2 * cm,
-        rightMargin  = 1.2 * cm,
+        leftMargin   = 0.6 * cm,
+        rightMargin  = 0.6 * cm,
         topMargin    = 1.2 * cm,
         bottomMargin = 1.5 * cm,
     )
