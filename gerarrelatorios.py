@@ -335,10 +335,10 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
         
         largura = espaco_total / n_subcolunas
         
-        col_acoes = largura
-        col_pessoas = largura
-        col_veiculos = largura
-        col_divulg = largura
+        col_acoes = largura * 0.9
+        col_pessoas = largura * 1.2
+        col_veiculos = largura * 1.3
+        col_divulg = largura * 1.1
     else:
         col_acoes = col_pessoas = col_divulg = 2.0 * cm
 
