@@ -309,7 +309,7 @@ def criar_documento_pdf(caminho: str):
         leftMargin   = 0.4 * cm,
         rightMargin  = 0.4 * cm,
         topMargin    = 1.2 * cm,
-        bottomMargin = 1.5 * cm,
+        bottomMargin = 1.5 * cm, 
     )
 
 
