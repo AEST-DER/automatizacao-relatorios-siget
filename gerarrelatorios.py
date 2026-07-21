@@ -315,7 +315,7 @@ def criar_documento_pdf(caminho: str):
 
 
 def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
-                            agrupar_por: str = "reg_label") -> Tuple[Table, Dict]:
+                            agrupar_por: str = "reg_label") -> Tuple[Table, Dict]: 
     tipos  = sorted(df_base["tipo_label"].dropna().unique()) if not df_base.empty else []
     labels = sorted(df_base[agrupar_por].dropna().unique())  if not df_base.empty else []
 
@@ -323,7 +323,8 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
     linha2 = [_paragrafo("")]
 
     # Largura útil do A4 paisagem com margens de 1.2cm = 29.7 - 2.4 = 27.3cm
-    LARGURA_UTIL = 27.3 * cm
+    PAGE_WIDTH, _ = landscape(A4)
+    LARGURA_UTIL = PAGE_WIDTH - doc.leftMargin - doc.rightMargin
     LARGURA_LABEL = 4.2 * cm
     n_tipos = len(tipos)
     # Cada tipo tem 3 sub-colunas (Acoes, Pessoas, Divulg.)
