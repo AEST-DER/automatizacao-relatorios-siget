@@ -367,7 +367,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
 
     # Largura útil do A4 paisagem com margens de 1.2cm = 29.7 - 2.4 = 27.3cm
     PAGE_WIDTH, _ = landscape(A2)
-    LARGURA_UTIL = PAGE_WIDTH - 4.8 * cm
+    LARGURA_UTIL = PAGE_WIDTH - 4.4 * cm
     LARGURA_LABEL = 4.2 * cm
     n_tipos = len(tipos)
     # Distribuímos o espaço restante entre as sub-colunas
