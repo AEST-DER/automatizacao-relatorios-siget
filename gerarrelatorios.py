@@ -178,9 +178,9 @@ def _padronizar_tipo_acao(valor: str) -> str:
         "teatro":            "Teatro Educativo",
         "seminario":         "Seminário",
         "workshop":          "Workshop",
-        "INTERVENCAO_MOBILIZACAO": "Intervenção/Mobilização",
-        "STAND_EDUCATIVO_FEIRA": "Stand Educativo/Feira",
-        "DIVULGACAO": "Divulgação",
+        "intervencao_mobilizacao": "Intervenção/Mobilização",
+        "stand_educativo_feira": "Stand Educativo/Feira",
+        "divulgacao": "Divulgação",
         "reuniao": "Reunião",
     }
     valor_normalizado = str(valor).lower().strip()
