@@ -15,10 +15,12 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import cm, mm
 from reportlab.platypus import (
     HRFlowable, PageBreak, Paragraph, SimpleDocTemplate,
-    Spacer, Table, TableStyle, KeepTogether,
+    Spacer, Table, TableStyle, Image, KeepTogether,
 )
 from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.charts.barcharts import VerticalBarChart
+from reportlab.lib.colors import white
+
 
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, Reference
