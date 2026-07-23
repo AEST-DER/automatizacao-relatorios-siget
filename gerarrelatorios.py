@@ -280,17 +280,45 @@ def _valor_negrito(valor: Any) -> Paragraph:
 
 
 def cabecalho_der_mg(linha3: str) -> Paragraph:
-    html = (
-        '<img src="./logomarca-der-edificacoes-cor-reduzida.png" style="text-align: left;">'
-        '<para alignment="center"><b>'
-        'DER-MG<br/>'
-        'GERÊNCIA DE EDUCAÇÃO PARA O TRÂNSITO - DO/GET<br/>'
-        f'{linha3}</b></para>'
+    estilo = ParagraphStyle(
+        "header",
+        fontName="Helvetica-Bold",
+        fontSize=10,
+        alignment=TA_CENTER,
+        leading=14,
     )
-    return Paragraph(html, ParagraphStyle(
-        "header", fontName="Helvetica-Bold", fontSize=10,
-        alignment=TA_CENTER, leading=14,
-    ))
+
+    texto = Paragraph(
+        f"""
+        <b>
+        DER-MG<br/>
+        GERÊNCIA DE EDUCAÇÃO PARA O TRÂNSITO - DO/GET<br/>
+        {linha3}
+        </b>
+        """,
+        estilo,
+    )
+
+    logo = Image("logomarca-der-edificacoes-cor-reduzida.png")
+    logo.drawWidth = 2.2 * cm
+    logo.drawHeight = 2.2 * cm
+
+    tabela = Table(
+        [[logo, texto]],
+        colWidths=[2.7 * cm, 24.6 * cm],   # ajuste conforme a largura do seu PDF
+    )
+
+    tabela.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("ALIGN", (0, 0), (0, 0), "CENTER"),
+        ("ALIGN", (1, 0), (1, 0), "CENTER"),
+        ("LEFTPADDING", (0,0), (-1,-1), 0),
+        ("RIGHTPADDING", (0,0), (-1,-1), 0),
+        ("TOPPADDING", (0,0), (-1,-1), 0),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 0),
+    ]))
+
+    return tabela
 
 
 def frase_educativa(ano: int) -> Paragraph:
