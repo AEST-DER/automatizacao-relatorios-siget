@@ -378,12 +378,13 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
         
         largura = espaco_total / n_subcolunas
         
-        col_acoes = largura * 0.9
+        col_acoes = largura * 0.8
         col_pessoas = largura * 1.2
         col_veiculos = largura * 1.3
-        col_divulg = largura * 1.1
+        col_divulg = largura * 1.3
     else:
-        col_acoes = col_pessoas = col_divulg = 2.0 * cm
+        col_acoes = col_pessoas = 2.0 * cm
+        col_divulg = 2.3 * cm
 
     larguras_colunas = [LARGURA_LABEL]
 
