@@ -633,7 +633,7 @@ def pdf_mensal(dados: DadosAgregados, ano: int, mes: int, diretorio_base: str) -
     caminho = os.path.join(pasta_mes, nome_arquivo)
 
     titulo = cabecalho_der_mg(
-        f'RELATORIO GERAL DE ACOES EDUCATIVAS — '
+        f'RELATÓRIO GERAL DE AÇÕES EDUCATIVAS — '
         f'<font color="#CC0000">{MESES_UP[mes]} / {ano}</font>'
     )
     criar_documento_pdf(caminho).build(construir_story_padrao(titulo, df_mensal, ano))
