@@ -338,7 +338,7 @@ def rodape_pdf() -> list:
         Spacer(1, 5 * mm),
         HRFlowable(width="100%", thickness=0.5, color=colors.grey),
         Paragraph(
-            f"Ultima atualizacao: {date.today().strftime('%d/%m/%Y')}",
+            f"Última atualização: {date.today().strftime('%d/%m/%Y')}",
             ParagraphStyle("rodape", fontName="Helvetica-Oblique",
                            fontSize=7, alignment=TA_CENTER),
         ),
@@ -529,8 +529,8 @@ def bloco_metas(totais: Dict) -> Table:
     dados = [
         [_paragrafo("<b>TOTALIZADOR GERAL</b>", tamanho=9, negrito=True), "", "",
          _paragrafo(f"<b>META ANUAL: {META_ANUAL}</b>", tamanho=8, negrito=True)],
-        [_paragrafo("<b>TIPO DE ACAO</b>", negrito=True),
-         _paragrafo("<b>ACOES</b>",        negrito=True),
+        [_paragrafo("<b>TIPO DE AÇÃO</b>", negrito=True),
+         _paragrafo("<b>AÇÕESS</b>",        negrito=True),
          _paragrafo("<b>PESSOAS</b>",      negrito=True),
          _paragrafo("<b>% DA META</b>",    negrito=True)],
     ]
@@ -609,7 +609,7 @@ def construir_story_padrao(titulo: Paragraph, df_base: pd.DataFrame,
     tabela_grafico = Table([[grafico]], colWidths=[26.7 * cm])
     tabela_grafico.setStyle(TableStyle([("ALIGN", (0, 0), (-1, -1), "CENTER")]))
     story.append(KeepTogether([
-        _paragrafo("DISTRIBUICAO DE ACOES POR TIPO", tamanho=8, negrito=True),
+        _paragrafo("DISTRIBUIÇÃO DE AÇÕES POR TIPO", tamanho=8, negrito=True),
         Spacer(1, 2 * mm),
         tabela_grafico,
     ]))
@@ -647,7 +647,7 @@ def pdf_acumulado(dados: DadosAgregados, ano: int, mes: int, diretorio_base: str
     caminho      = os.path.join(pasta_mes, nome_arquivo)
 
     titulo = cabecalho_der_mg(
-        f'RELATORIO ACUMULADO DE ACOES EDUCATIVAS — '
+        f'RELATORIO ACUMULADO DE AÇÕES EDUCATIVAS — '
         f'<font color="#CC0000">ACUMULADO {MESES_UP[1]} A {MESES_UP[mes]} / {ano}</font>'
     )
     criar_documento_pdf(caminho).build(construir_story_padrao(titulo, df_acumulado, ano))
@@ -664,7 +664,7 @@ def pdf_anual(dados: DadosAgregados, ano: int, diretorio_base: str, pasta_temp: 
         os.makedirs(os.path.dirname(caminho), exist_ok=True)
 
     titulo = cabecalho_der_mg(
-        f'RELATORIO ANUAL DE ACOES EDUCATIVAS — '
+        f'RELATORIO ANUAL DE AÇÕES EDUCATIVAS — '
         f'<font color="#CC0000">{ano}</font>'
     )
     criar_documento_pdf(caminho).build(construir_story_padrao(titulo, df_anual, ano))
@@ -683,18 +683,18 @@ def pdf_metas(dados: DadosAgregados, ano: int, diretorio_base: str, pasta_temp: 
     story     = []
     titulo    = cabecalho_der_mg(
         f'ACOMPANHAMENTO DE METAS — '
-        f'<font color="#CC0000">{ano} | META: {META_ANUAL} ACOES</font>'
+        f'<font color="#CC0000">{ano} | META: {META_ANUAL} AÇÕES</font>'
     )
     story.append(titulo)
     story.append(Spacer(1, 5 * mm))
 
     cabecalho = [
-        _paragrafo("<b>MES</b>",            negrito=True),
-        _paragrafo("<b>ACOES NO MES</b>",   negrito=True),
+        _paragrafo("<b>MÊS</b>",            negrito=True),
+        _paragrafo("<b>AÇÕES NO MÊS</b>",   negrito=True),
         _paragrafo("<b>PESSOAS</b>",         negrito=True),
         _paragrafo("<b>ACUMULADO</b>",       negrito=True),
         _paragrafo("<b>META ESPERADA</b>",   negrito=True),
-        _paragrafo("<b>DIFERENCA</b>",       negrito=True),
+        _paragrafo("<b>DIFERENÇA</b>",       negrito=True),
         _paragrafo("<b>% META</b>",          negrito=True),
     ]
     linhas            = [cabecalho]
@@ -805,7 +805,7 @@ def pdf_regional(dados: DadosAgregados, ano: int, diretorio_base: str, pasta_tem
             story.append(PageBreak())
         primeiro = False
         titulo = cabecalho_der_mg(
-            f'RELATORIO DE ACOES EDUCATIVAS — '
+            f'RELATORIO DE AÇÕES EDUCATIVAS — '
             f'<font color="#CC0000">{MESES_UP[mes]} / {ano}</font>'
         )
         story.extend(construir_story_padrao(titulo, df_mensal, ano))
@@ -885,7 +885,7 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
     for tipo in tipos:
         ws.merge_cells(start_row=2, start_column=col, end_row=2, end_column=col + 2)
         _cabecalho_excel(ws, f"{get_column_letter(col)}2", tipo, fundo="D9D9D9", letra="000000")
-        for sub, ci in [("Acoes", col), ("Pessoas", col + 1), ("Divulg.", col + 2)]:
+        for sub, ci in [("Ações", col), ("Pessoas", col + 1), ("Material distribuído", col + 2)]:
             _cabecalho_excel(ws, f"{get_column_letter(ci)}3", sub, fundo="D9D9D9", letra="000000", tamanho=8)
         col += 3
     ws.row_dimensions[2].height = 18
@@ -933,7 +933,7 @@ def _aba_anual_excel(wb: Workbook, dados: DadosAgregados, ano: int):
     cel.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[1].height = 22
 
-    for i, cab in enumerate(["Mes", "Total Acoes", "Pessoas Orientadas", "Divulgacoes", "Meta Esperada", "% da Meta"]):
+    for i, cab in enumerate(["Mês", "Total Ações", "Pessoas Orientadas", "Divulgações", "Meta Esperada", "% da Meta"]):
         _cabecalho_excel(ws, f"{get_column_letter(i + 1)}2", cab)
     ws.row_dimensions[2].height = 28
 
@@ -973,7 +973,7 @@ def _aba_regional_excel(wb: Workbook, dados: DadosAgregados, ano: int):
     ws = wb.create_sheet("Por Regional")
     ws.merge_cells("A1:N1")
     cel = ws["A1"]
-    cel.value     = f"ACOES EDUCATIVAS POR REGIONAL — {ano}"
+    cel.value     = f"AÇÕES EDUCATIVAS POR REGIONAL — {ano}"
     cel.font      = Font(bold=True, size=12, color="CC0000", name="Arial")
     cel.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[1].height = 22
@@ -985,7 +985,7 @@ def _aba_regional_excel(wb: Workbook, dados: DadosAgregados, ano: int):
     regionais   = sorted(df_anual["reg_label"].dropna().unique()) if not df_anual.empty else []
     linha_atual = 3
 
-    for metrica_nome, metrica_key in [("N de Acoes", "a"), ("Pessoas Orientadas", "p"), ("Divulgacoes", "d")]:
+    for metrica_nome, metrica_key in [("N de Ações", "a"), ("Pessoas Orientadas", "p"), ("Divulgações", "d")]:
         ws.merge_cells(f"A{linha_atual}:N{linha_atual}")
         cel = ws[f"A{linha_atual}"]
         cel.value     = metrica_nome
@@ -1037,12 +1037,12 @@ def _aba_metas_excel(wb: Workbook, dados: DadosAgregados, ano: int):
     ws = wb.create_sheet("Metas")
     ws.merge_cells("A1:G1")
     cel = ws["A1"]
-    cel.value     = f"ACOMPANHAMENTO DE METAS — {ano} | META: {META_ANUAL} ACOES"
+    cel.value     = f"ACOMPANHAMENTO DE METAS — {ano} | META: {META_ANUAL} AÇÕES"
     cel.font      = Font(bold=True, size=12, color="CC0000", name="Arial")
     cel.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[1].height = 22
 
-    for i, cab in enumerate(["Mes", "Acoes no Mes", "Pessoas", "Acumulado", "Meta Esperada", "Diferenca", "% da Meta"]):
+    for i, cab in enumerate(["Mes", "Ações no Mes", "Pessoas", "Acumulado", "Meta Esperada", "Diferenca", "% da Meta"]):
         _cabecalho_excel(ws, f"{get_column_letter(i + 1)}2", cab)
     ws.row_dimensions[2].height = 28
 
@@ -1083,7 +1083,7 @@ def _aba_metas_excel(wb: Workbook, dados: DadosAgregados, ano: int):
     chart = BarChart()
     chart.type     = "col"
     chart.grouping = "clustered"
-    chart.title    = "Acoes Acumuladas vs Meta Esperada"
+    chart.title    = "Ações Acumuladas vs Meta Esperada"
     chart.y_axis.title = "Quantidade"
     chart.x_axis.title = "Mes"
     chart.style  = 10
