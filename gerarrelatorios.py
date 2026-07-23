@@ -366,10 +366,10 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
             ]
     
             linha2 += [
-                _paragrafo("<b>Acoes</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Ações</b>", tamanho=6.5, negrito=True),
                 _paragrafo("<b>Pessoas</b>", tamanho=6.5, negrito=True),
-                _paragrafo("<b>Veiculos</b>", tamanho=6.5, negrito=True),
-                _paragrafo("<b>Divulg.</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Veículos</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Material distribuído</b>", tamanho=6.5, negrito=True),
             ]
     
             larguras_colunas += [
@@ -388,9 +388,9 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
             ]
     
             linha2 += [
-                _paragrafo("<b>Acoes</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Ações</b>", tamanho=6.5, negrito=True),
                 _paragrafo("<b>Pessoas</b>", tamanho=6.5, negrito=True),
-                _paragrafo("<b>Divulg.</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Material distribuído</b>", tamanho=6.5, negrito=True),
             ]
     
             larguras_colunas += [
