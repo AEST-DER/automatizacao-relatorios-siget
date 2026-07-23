@@ -302,12 +302,12 @@ def cabecalho_der_mg(linha3: str) -> Paragraph:
     )
 
     logo = Image("logomarca-der-edificacoes-cor-reduzida.png")
-    logo.drawWidth = 2.2 * cm
+    logo.drawWidth = 2.7 * cm
     logo.drawHeight = 2.2 * cm
 
     tabela = Table(
         [[logo, texto]],
-        colWidths=[2.7 * cm, 24.6 * cm],   # ajuste conforme a largura do seu PDF
+        colWidths=[4 * cm, 24.6 * cm],   # ajuste conforme a largura do seu PDF
     )
 
     tabela.setStyle(TableStyle([
