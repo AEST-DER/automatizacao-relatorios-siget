@@ -270,7 +270,7 @@ def _valor_negrito(valor: Any) -> Paragraph:
 def cabecalho_der_mg(linha3: str) -> Paragraph:
     html = (
         '<para alignment="center"><b>'
-        'DEPARTAMENTO DE EDIFICACOES E ESTRADAS DE RODAGEM DO ESTADO DE MINAS GERAIS<br/>'
+        'DER-MG<br/>'
         'GERENCIA DE EDUCACAO PARA O TRANSITO - DO/GET<br/>'
         f'{linha3}</b></para>'
     )
