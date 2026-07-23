@@ -170,8 +170,8 @@ def _normalizar_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 def _padronizar_tipo_acao(valor: str) -> str:
     mapa = {
-        "blitz":             "Blitz Educativa",
-        "comando_educativo": "Blitz Educativa",
+        "blitz":             "Comando educativo (blitz)",
+        "comando_educativo": "Comando educativo (blitz)",
         "curso":             "Curso",
         "palestra":          "Palestra",
         "carreata":          "Carreata",
@@ -374,7 +374,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
     if n_tipos > 0:
         espaco_total = LARGURA_UTIL - LARGURA_LABEL
 
-        n_subcolunas = len(tipos) * 3 + (1 if "Blitz Educativa" in tipos else 0)
+        n_subcolunas = len(tipos) * 3 + (1 if "Comando educativo (blitz)" in tipos else 0)
         
         largura = espaco_total / n_subcolunas
         
@@ -389,7 +389,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
 
     for tipo in tipos:
     
-        if tipo == "Blitz Educativa":
+        if tipo == "Comando educativo (blitz)":
     
             linha1 += [
                 _paragrafo(f"<b>{tipo.upper()}</b>", tamanho=7.0, negrito=True),
@@ -440,7 +440,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
             acoes  = len(subset_tipo)
             pessoas = int(subset_tipo["n_pessoas_orientadas_educadas"].sum()) if not subset_tipo.empty else 0
             divulg  = int(subset_tipo["qtd_material_distribuido"].sum())      if not subset_tipo.empty else 0
-            if tipo == "Blitz Educativa":
+            if tipo == "Comando educativo (blitz)":
 
                 veiculos = int(subset_tipo["veiculos"].sum()) if not subset_tipo.empty else 0
             
@@ -471,7 +471,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
     
         t = totais[tipo]
     
-        if tipo == "Blitz Educativa":
+        if tipo == "Comando educativo (blitz)":
     
             linha_total += [
                 _valor_negrito(t["acoes"]),
@@ -506,7 +506,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
     col = 1
 
     for tipo in tipos:
-        if tipo == "Blitz Educativa":
+        if tipo == "Comando educativo (blitz)":
             estilo.add("SPAN", (col, 0), (col + 3, 0))
             col += 4
         else:
