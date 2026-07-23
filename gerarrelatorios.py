@@ -557,7 +557,7 @@ def construir_story_padrao(titulo: Paragraph, df_base: pd.DataFrame,
     tabela, totais = tabela_acoes_educativas(df_base, ano, agrupar_por)
     story.append(tabela)
     story.append(Spacer(1, 5 * mm))
-    story.append(frase_educativa(ano))
+    # story.append(frase_educativa(ano))
     story.append(Spacer(1, 5 * mm))
 
     bloco_meta  = bloco_metas(totais)
