@@ -530,7 +530,7 @@ def bloco_metas(totais: Dict) -> Table:
         [_paragrafo("<b>TOTALIZADOR GERAL</b>", tamanho=9, negrito=True), "", "",
          _paragrafo(f"<b>META ANUAL: {META_ANUAL}</b>", tamanho=8, negrito=True)],
         [_paragrafo("<b>TIPO DE AÇÃO</b>", negrito=True),
-         _paragrafo("<b>AÇÕESS</b>",        negrito=True),
+         _paragrafo("<b>AÇÕES</b>",        negrito=True),
          _paragrafo("<b>PESSOAS</b>",      negrito=True),
          _paragrafo("<b>% DA META</b>",    negrito=True)],
     ]
