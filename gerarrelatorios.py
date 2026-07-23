@@ -178,10 +178,18 @@ def _padronizar_tipo_acao(valor: str) -> str:
         "teatro":            "Teatro Educativo",
         "seminario":         "Seminário",
         "workshop":          "Workshop",
+        "exposicao":         "Exposição",
         "intervencao_mobilizacao": "Intervenção/Mobilização",
         "stand_educativo_feira": "Stand Educativo/Feira",
         "divulgacao": "Divulgação",
         "reuniao": "Reunião",
+        "transitolandia": "Transitolândia",
+        "capacitacao_professores": "Capacitação de Professores",
+        "aperfeicoamento_servidor": "Aperfeiçoamento do Servidor",
+        "estagio": "Estágio não-remunerado",
+
+
+     
     }
     valor_normalizado = str(valor).lower().strip()
     for chave, label in mapa.items():
