@@ -281,9 +281,10 @@ def _valor_negrito(valor: Any) -> Paragraph:
 
 def cabecalho_der_mg(linha3: str) -> Paragraph:
     html = (
+        '<img src="./logomarca-der-edificacoes-cor-reduzida.png" style="text-align: left;">'
         '<para alignment="center"><b>'
         'DER-MG<br/>'
-        'GERENCIA DE EDUCACAO PARA O TRANSITO - DO/GET<br/>'
+        'GERÊNCIA DE EDUCAÇÃO PARA O TRÂNSITO - DO/GET<br/>'
         f'{linha3}</b></para>'
     )
     return Paragraph(html, ParagraphStyle(
