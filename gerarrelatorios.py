@@ -10,7 +10,7 @@ import pandas as pd
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
-from reportlab.lib.pagesizes import A4, A3, A2 landscape
+from reportlab.lib.pagesizes import A4, A3, A2, landscape
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import cm, mm
 from reportlab.platypus import (
