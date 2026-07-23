@@ -10,7 +10,7 @@ import pandas as pd
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
-from reportlab.lib.pagesizes import A4, A3, landscape
+from reportlab.lib.pagesizes import A4, A3, A2 landscape
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import cm, mm
 from reportlab.platypus import (
@@ -317,7 +317,7 @@ def rodape_pdf() -> list:
 def criar_documento_pdf(caminho: str):
     return SimpleDocTemplate(
         caminho,
-        pagesize     = landscape(A3),
+        pagesize     = landscape(A2),
         leftMargin   = 0.4 * cm,
         rightMargin  = 0.4 * cm,
         topMargin    = 1.2 * cm,
@@ -335,7 +335,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
     linha2 = [_paragrafo("")]
 
     # Largura útil do A4 paisagem com margens de 1.2cm = 29.7 - 2.4 = 27.3cm
-    PAGE_WIDTH, _ = landscape(A3)
+    PAGE_WIDTH, _ = landscape(A2)
     LARGURA_UTIL = PAGE_WIDTH - 4.8 * cm
     LARGURA_LABEL = 4.2 * cm
     n_tipos = len(tipos)
