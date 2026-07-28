@@ -180,14 +180,14 @@ def _padronizar_tipo_acao(valor: str) -> str:
         "teatro":            "Teatro Educativo",
         "seminario":         "Seminário",
         "workshop":          "Workshop",
-        "exposicao":         "Exposição",
+        "exposicao":         "Exposição imersiva (simulação)",
         "intervencao_mobilizacao": "Intervenção/Mobilização",
         "stand_educativo_feira": "Stand Educativo/Feira",
         "divulgacao": "Divulgação",
         "reuniao": "Reunião",
         "transitolandia": "Transitolândia",
         "capacitacao_professores": "Capacitação de Professores",
-        "aperfeicoamento_servidor": "Aperfeiçoamento do Servidor",
+        "aperfeicoamento_servidor": "Aperfeiçoamento/treinamento",
         "estagio": "Estágio não-remunerado",
 
 
