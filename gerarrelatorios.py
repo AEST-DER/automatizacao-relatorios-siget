@@ -400,7 +400,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
                 _paragrafo("<b>Ações</b>", tamanho=6.5, negrito=True),
                 _paragrafo("<b>Pessoas</b>", tamanho=6.5, negrito=True),
                 _paragrafo("<b>Veículos</b>", tamanho=6.5, negrito=True),
-                _paragrafo("<b>Material distribuído</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Mat. distribuído</b>", tamanho=6.5, negrito=True),
             ]
     
             larguras_colunas += [
@@ -421,7 +421,7 @@ def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
             linha2 += [
                 _paragrafo("<b>Ações</b>", tamanho=6.5, negrito=True),
                 _paragrafo("<b>Pessoas</b>", tamanho=6.5, negrito=True),
-                _paragrafo("<b>Material distribuído</b>", tamanho=6.5, negrito=True),
+                _paragrafo("<b>Mat. distribuído</b>", tamanho=6.5, negrito=True),
             ]
     
             larguras_colunas += [
@@ -885,7 +885,7 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
     for tipo in tipos:
         ws.merge_cells(start_row=2, start_column=col, end_row=2, end_column=col + 2)
         _cabecalho_excel(ws, f"{get_column_letter(col)}2", tipo, fundo="D9D9D9", letra="000000")
-        for sub, ci in [("Ações", col), ("Pessoas", col + 1), ("Material distribuído", col + 2)]:
+        for sub, ci in [("Ações", col), ("Pessoas", col + 1), ("Mat. distribuído", col + 2)]:
             _cabecalho_excel(ws, f"{get_column_letter(ci)}3", sub, fundo="D9D9D9", letra="000000", tamanho=8)
         col += 3
     ws.row_dimensions[2].height = 18
