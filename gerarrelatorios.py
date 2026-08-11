@@ -869,7 +869,7 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
     tipos  = sorted(df_mensal["tipo_label"].dropna().unique()) if not df_mensal.empty else []
     labels = sorted(df_mensal["reg_label"].dropna().unique())  if not df_mensal.empty else []
 
-    num_cols    = 1 + len(tipos) * 3
+    num_cols = 1 + len(tipos) * 3 + (1 if "Blitz Educativa" in tipos else 0)
     ultima_col  = get_column_letter(num_cols)
     ws.merge_cells(f"A1:{ultima_col}1")
     cel = ws["A1"]
@@ -922,6 +922,159 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
     for ci in range(2, col):
         ws.column_dimensions[get_column_letter(ci)].width = 10
     ws.freeze_panes = "A4"
+
+    # ==========================================================
+    # TOTALIZADOR GERAL / METAS
+    # ==========================================================
+    
+    linha_meta = linha_total + 3
+    
+    # Cabeçalho do totalizador
+    ws.merge_cells(
+        start_row=linha_meta,
+        start_column=1,
+        end_row=linha_meta,
+        end_column=3
+    )
+    
+    _cabecalho_excel(
+        ws,
+        f"A{linha_meta}",
+        "TOTALIZADOR GERAL",
+        fundo="CC0000",
+        letra="FFFFFF",
+        tamanho=10
+    )
+    
+    _celula_excel(
+        ws,
+        f"D{linha_meta}",
+        f"META ANUAL: {META_ANUAL}",
+        negrito=True,
+        fundo="CC0000",
+        alinhamento="center"
+    )
+    
+    # Cabeçalho das colunas
+    linha_cab = linha_meta + 1
+    
+    for coluna, valor in enumerate(
+        ["TIPO DE AÇÃO", "AÇÕES", "PESSOAS", "% DA META"],
+        start=1
+    ):
+        _cabecalho_excel(
+            ws,
+            f"{get_column_letter(coluna)}{linha_cab}",
+            valor,
+            fundo="CC0000",
+            letra="FFFFFF",
+            tamanho=9
+        )
+    
+    # Dados do totalizador
+    linha = linha_cab + 1
+    
+    total_acoes = 0
+    total_pessoas = 0
+    
+    for tipo in tipos:
+    
+        # Dados do tipo
+        subset_tipo = df_mensal[
+            df_mensal["tipo_label"] == tipo
+        ]
+    
+        acoes = len(subset_tipo)
+    
+        pessoas = (
+            int(subset_tipo["n_pessoas_orientadas_educadas"].sum())
+            if not subset_tipo.empty
+            else 0
+        )
+    
+        percentual = (
+            acoes / META_ANUAL
+            if META_ANUAL
+            else 0
+        )
+    
+        total_acoes += acoes
+        total_pessoas += pessoas
+    
+        _celula_excel(
+            ws,
+            f"A{linha}",
+            tipo,
+            alinhamento="left"
+        )
+    
+        _celula_excel(
+            ws,
+            f"B{linha}",
+            acoes or None
+        )
+    
+        _celula_excel(
+            ws,
+            f"C{linha}",
+            pessoas or None
+        )
+    
+        _celula_excel(
+            ws,
+            f"D{linha}",
+            percentual,
+            formato="0.0%"
+        )
+    
+        linha += 1
+    
+    # Total acumulado
+    percentual_total = (
+        total_acoes / META_ANUAL
+        if META_ANUAL
+        else 0
+    )
+    
+    _celula_excel(
+        ws,
+        f"A{linha}",
+        "TOTAL ACUMULADO",
+        negrito=True,
+        fundo="BFBFBF",
+        alinhamento="left"
+    )
+    
+    _celula_excel(
+        ws,
+        f"B{linha}",
+        total_acoes,
+        negrito=True,
+        fundo="BFBFBF"
+    )
+    
+    _celula_excel(
+        ws,
+        f"C{linha}",
+        total_pessoas,
+        negrito=True,
+        fundo="BFBFBF"
+    )
+    
+    _celula_excel(
+        ws,
+        f"D{linha}",
+        percentual_total,
+        negrito=True,
+        fundo="BFBFBF",
+        formato="0.0%"
+    )
+    
+    # Larguras
+    ws.column_dimensions["A"].width = 32
+    ws.column_dimensions["B"].width = 12
+    ws.column_dimensions["C"].width = 14
+    ws.column_dimensions["D"].width = 14
 
 
 def _aba_anual_excel(wb: Workbook, dados: DadosAgregados, ano: int):
