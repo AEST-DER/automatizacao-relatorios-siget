@@ -869,7 +869,7 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
     tipos  = sorted(df_mensal["tipo_label"].dropna().unique()) if not df_mensal.empty else []
     labels = sorted(df_mensal["reg_label"].dropna().unique())  if not df_mensal.empty else []
 
-    num_cols = 1 + len(tipos) * 3 + (1 if "Blitz Educativa" in tipos else 0)
+    num_cols = 1 + len(tipos) * 3 + (1 if "Comando educativo (blitz)" in tipos else 0)
     ultima_col  = get_column_letter(num_cols)
     ws.merge_cells(f"A1:{ultima_col}1")
     cel = ws["A1"]
