@@ -4,7 +4,8 @@ import zipfile
 import shutil
 from datetime import datetime, date
 from typing import Dict, List, Tuple, Optional, Any
- 
+from dotenv import load_dotenv
+
 import requests
 import pandas as pd
 
@@ -48,9 +49,11 @@ C_ALT   = colors.HexColor("#F5F5F5")
 C_BRNC  = colors.white
 C_PRT   = colors.black
 
+load_dotenv()
 
 ARCGIS_USER = os.getenv("ARCGIS_USER")
 ARCGIS_PASS = os.getenv("ARCGIS_PASS")
+
 
 TOKEN_URL = (
     "https://observatorio.infraestrutura.mg.gov.br"
@@ -360,6 +363,7 @@ def criar_documento_pdf(caminho: str):
 def tabela_acoes_educativas(df_base: pd.DataFrame, ano: int,
                             agrupar_por: str = "reg_label") -> Tuple[Table, Dict]: 
     tipos  = sorted(df_base["tipo_label"].dropna().unique()) if not df_base.empty else []
+    print(tipos)
     labels = sorted(df_base[agrupar_por].dropna().unique())  if not df_base.empty else []
 
     linha1 = [_paragrafo(f"<b>{ano}</b>", tamanho=8, negrito=True)]
@@ -883,15 +887,31 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
 
     col = 2
     for tipo in tipos:
-        ws.merge_cells(start_row=2, start_column=col, end_row=2, end_column=col + 2)
-        _cabecalho_excel(ws, f"{get_column_letter(col)}2", tipo, fundo="D9D9D9", letra="000000")
-        for sub, ci in [("Ações", col), ("Pessoas", col + 1), ("Mat. distribuído", col + 2)]:
-            _cabecalho_excel(ws, f"{get_column_letter(ci)}3", sub, fundo="D9D9D9", letra="000000", tamanho=8)
-        col += 3
+        if tipo == "Comando educativo (blitz)":
+            ws.merge_cells(start_row=2, start_column=col, end_row=2, end_column=col + 3)
+            _cabecalho_excel(ws, f"{get_column_letter(col)}2", tipo, fundo="D9D9D9", letra="000000")
+            for sub, ci in [("Ações", col), ("Pessoas", col + 1), ("Veículos", col + 2), ("Mat. distribuído", col + 3)]:
+                _cabecalho_excel(ws, f"{get_column_letter(ci)}3", sub, fundo="D9D9D9", letra="000000", tamanho=8)
+            col += 4
+
+        else:
+            ws.merge_cells(start_row=2, start_column=col, end_row=2, end_column=col + 2)
+            _cabecalho_excel(ws, f"{get_column_letter(col)}2", tipo, fundo="D9D9D9", letra="000000")
+            for sub, ci in [("Ações", col), ("Pessoas", col + 1), ("Mat. distribuído", col + 2)]:
+                _cabecalho_excel(ws, f"{get_column_letter(ci)}3", sub, fundo="D9D9D9", letra="000000", tamanho=8)
+            col += 3
     ws.row_dimensions[2].height = 18
     ws.row_dimensions[3].height = 18
 
-    totais = {t: {"a": 0, "p": 0, "d": 0} for t in tipos}
+    totais = {
+        t: {
+            "a": 0,
+            "p": 0,
+            "v": 0,
+            "d": 0
+        }
+        for t in tipos
+    }
     for idx, label in enumerate(labels):
         linha      = idx + 4
         cor_fundo  = "FFF2F2" if idx % 2 else "FFFFFF"
@@ -899,14 +919,53 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
         col = 2
         for tipo in tipos:
             subset = df_mensal[(df_mensal["reg_label"] == label) & (df_mensal["tipo_label"] == tipo)] if not df_mensal.empty else df_mensal
-            acoes  = len(subset)
-            pessoas = int(subset["n_pessoas_orientadas_educadas"].sum()) if not subset.empty else 0
-            divulg  = int(subset["qtd_material_distribuido"].sum())      if not subset.empty else 0
+            acoes = len(subset)
+
+            pessoas = (
+                int(subset["n_pessoas_orientadas_educadas"].sum())
+                if not subset.empty else 0
+            )
+
+            divulg = (
+                int(subset["qtd_material_distribuido"].sum())
+                if not subset.empty else 0
+            )
+
+            if tipo == "Comando educativo (blitz)":
+                veiculos = (
+                    int(subset["veiculos"].sum())
+                    if not subset.empty else 0
+                )
+            else:
+                veiculos = 0
+            
             totais[tipo]["a"] += acoes
             totais[tipo]["p"] += pessoas
+            totais[tipo]["v"] += veiculos
             totais[tipo]["d"] += divulg
-            for valor in [acoes or None, pessoas or None, divulg or None]:
-                _celula_excel(ws, f"{get_column_letter(col)}{linha}", valor, fundo=cor_fundo)
+
+            if tipo == "Comando educativo (blitz)":
+                valores = [
+                    acoes or None,
+                    pessoas or None,
+                    veiculos or None,
+                    divulg or None
+                ]
+
+            else:
+
+                valores = [
+                    acoes or None,
+                    pessoas or None,
+                    divulg or None
+                ]
+            for valor in valores:
+                _celula_excel(
+                    ws,
+                    f"{get_column_letter(col)}{linha}",
+                    valor,
+                    fundo=cor_fundo
+                )
                 col += 1
 
     linha_total = len(labels) + 4
@@ -914,8 +973,29 @@ def _aba_mensal_excel(wb: Workbook, dados: DadosAgregados, ano: int, mes: int):
     col = 2
     for tipo in tipos:
         t = totais[tipo]
-        for valor in [t["a"] or None, t["p"] or None, t["d"] or None]:
-            _celula_excel(ws, f"{get_column_letter(col)}{linha_total}", valor, negrito=True, fundo="BFBFBF")
+
+        if tipo == "Comando educativo (blitz)":
+            valores = [
+                t["a"] or None,
+                t["p"] or None,
+                t["v"] or None,
+                t["d"] or None
+            ]
+        else:
+            valores = [
+                t["a"] or None,
+                t["p"] or None,
+                t["d"] or None
+            ]
+
+        for valor in valores:
+            _celula_excel(
+                ws,
+                f"{get_column_letter(col)}{linha_total}",
+                valor,
+                negrito=True,
+                fundo="BFBFBF"
+            )
             col += 1
 
     ws.column_dimensions["A"].width = 24
