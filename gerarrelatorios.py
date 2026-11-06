@@ -62,7 +62,7 @@ TOKEN_URL = (
 DATA_URL = (
     "https://observatorio.infraestrutura.mg.gov.br"
     "/server/rest/services/Hosted"
-    "/service_078c76bde8234b6f865b17353d59e987/FeatureServer/0/query"
+    "/service_b4ab790dc0e64698b773de5a8d771acf/FeatureServer/0/query"
 )
 
 
